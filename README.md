@@ -4,7 +4,7 @@ Ein kleines neuronales Netz zum Zuschauen und Ausprobieren: Es lernt, Gutteile (
 
 Erstellt für den Unterricht an der Jakob-Preh-Schule ([bsnes.de](https://www.bsnes.de)).
 
-**Live-Version:** [Hier direkt anschauen](https://flowthetensor.github.io/PW9-NN-in-p5/)
+**Live-Version:** [Hier direkt anschauen](https://flowthetensor.github.io/LS-Neuronales-Netz/)
 
 ---
 
@@ -204,3 +204,26 @@ Die Seite braucht einen kleinen Webserver, ein Doppelklick auf `index.html` reic
 - Alle Schleifen haben geschweifte Klammern: Der p5-Web-Editor baut in Schleifen eine Endlosschleifen-Sicherung ein, die bei Schleifen ohne Klammern fehlschlägt.
 - Fehler in `draw()` werden abgefangen und als Hinweis angezeigt, statt das Programm einzufrieren.
 - Der Datensatz wird mit festem Startwert erzeugt und ist deshalb bei jedem Start gleich. Nur die Aufteilung in Trainings- und Testdaten (75 / 35) ist zufällig.
+
+## Lizenz
+
+[![CC BY 4.0](https://img.shields.io/badge/Lizenz-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/deed.de)
+
+**KI-Qualitätsprüfung · Spritzguss** von **Christoph Rothaug, Jakob-Preh-Schule Bad Neustadt**, steht unter der Lizenz [Creative Commons Namensnennung 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.de). Der vollständige Lizenztext steht in der Datei [`LICENSE`](LICENSE).
+
+Du darfst das Material (Quellcode, Texte, Aufgaben und Grafiken) kopieren, weitergeben und verändern, auch kommerziell. Dafür musst du
+
+- den Urheber nennen: *Christoph Rothaug, Jakob-Preh-Schule Bad Neustadt*,
+- auf die Lizenz verlinken: <https://creativecommons.org/licenses/by/4.0/deed.de>,
+- angeben, ob du etwas verändert hast.
+
+Vorschlag für die Namensnennung: *„KI-Qualitätsprüfung · Spritzguss“ von Christoph Rothaug, Jakob-Preh-Schule Bad Neustadt, CC BY 4.0, https://github.com/FlowTheTensor/LS-Neuronales-Netz*
+
+**Ausgenommen** von dieser Lizenz sind:
+
+| Bestandteil | Rechte |
+|---|---|
+| `libraries/p5.min.js` | [p5.js](https://p5js.org), GNU LGPL 2.1 |
+| `libraries/p5.sound.min.js` | [p5.sound](https://p5js.org/reference/p5.sound/), GNU LGPL 2.1 |
+| `assets/logo-jps.png` | Logo der Jakob-Preh-Schule – alle Rechte bei der Schule |
+| Schriften Quicksand, Inter, JetBrains Mono | über Google Fonts eingebunden, SIL Open Font License 1.1 |
