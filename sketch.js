@@ -86,9 +86,9 @@ const KURZ = ["T", "p"]; // Kurzzeichen der Eingaben
 
 const KARTE_RES = 180;
 
-// Farben nach dem Corporate Design der Jakob-Preh-Schule (bsnes.de):
+// Farben (hell und dunkel) nach dem Corporate Design der Jakob-Preh-Schule (bsnes.de):
 // Papierweiß, Logo-Schwarz, Schul-Rot als Akzent, Senf als zweiter Akzent.
-const FARBE = {
+const FARBE_HELL = {
   papier: [251, 249, 245], // Hintergrund
   flaeche: [255, 255, 255], // Karten / Panels
   flaeche2: [243, 238, 230], // abgesetzte Flächen
@@ -108,7 +108,81 @@ const FARBE = {
   vor: [29, 29, 28], // Vorwärtsrechnung
   fehler: [228, 0, 43], // Fehlersignal läuft zurück
   neuron: [29, 29, 28],
+  // Flächen und Schrift auf Flächen (für das dunkle Schema nötig)
+  textInvers: [255, 255, 255],
+  dunkelFlaeche: [29, 29, 28],
+  schatten: [29, 29, 28],
+  akzentFlaeche: [253, 240, 242],
+  akzentLinie: [240, 200, 208],
+  rotFlaeche: [251, 225, 230],
+  gruenFlaeche: [228, 241, 233],
 };
+
+const FARBE_DUNKEL = {
+  papier: [22, 22, 21],
+  flaeche: [32, 31, 30],
+  flaeche2: [44, 42, 40],
+  linie: [62, 59, 55],
+  text: [236, 232, 224],
+  grau: [184, 178, 168],
+  blass: [140, 135, 126],
+  akzent: [236, 76, 98],
+  akzentHell: [255, 64, 92],
+  senf: [222, 166, 72],
+  io: [96, 186, 132],
+  nio: [236, 76, 98],
+  plus: [104, 156, 222],
+  minus: [222, 166, 72],
+  dPlus: [156, 196, 244],
+  dMinus: [244, 196, 110],
+  vor: [236, 232, 224],
+  fehler: [255, 64, 92],
+  neuron: [10, 10, 9], // bleibt dunkel, Rand und Schrift sind hell
+  textInvers: [22, 22, 21],
+  dunkelFlaeche: [70, 67, 62],
+  schatten: [0, 0, 0],
+  akzentFlaeche: [52, 27, 32],
+  akzentLinie: [104, 44, 56],
+  rotFlaeche: [72, 32, 40],
+  gruenFlaeche: [30, 54, 41],
+};
+
+const FARBE = {};
+
+// --- Farbschema hell/dunkel ---------------------------------------------------
+// FARBE enthält immer die aktive Palette. Beim Umschalten werden die Arrays
+// in place überschrieben, damit Verweise wie [FARBE.blau, …] gültig bleiben.
+// Die Wahl gilt für alle Lernsituationen (gleicher localStorage-Schlüssel).
+const FARBSCHEMA_SCHLUESSEL = "jps-lernsituationen-farbschema";
+let dunkelModus = false;
+
+function setzeFarbschema(dunkel) {
+  dunkelModus = !!dunkel;
+  const quelle = dunkelModus ? FARBE_DUNKEL : FARBE_HELL;
+  for (const k in quelle) {
+    if (FARBE[k]) {
+      FARBE[k].splice(0, FARBE[k].length, ...quelle[k]);
+    } else {
+      FARBE[k] = quelle[k].slice();
+    }
+  }
+  document.documentElement.classList.toggle("dunkelmodus", dunkelModus);
+}
+
+function gespeichertesFarbschema() {
+  try {
+    const v = localStorage.getItem(FARBSCHEMA_SCHLUESSEL);
+    if (v === "dunkel" || v === "hell") {
+      return v === "dunkel";
+    }
+  } catch (e) {
+    // kein Speicher verfügbar (z. B. privater Modus) – Systemeinstellung nehmen
+  }
+  return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+}
+
+setzeFarbschema(gespeichertesFarbschema());
+
 
 // Dauer der einzelnen Phasen der Fehlerrückführung in ms
 const RF_DAUER = { ausgang: 2600, wAus: 3200, versteckt: 2600, wEin: 3200, bias: 2400, neu: 2400 };
@@ -699,7 +773,7 @@ function mausY() {
 // (der Punkt nimmt die Satzzeichen aus dem Logo "jakob·preh·schule!" auf)
 function panel(p) {
   noStroke();
-  fill(29, 29, 28, 10);
+  fill(...FARBE.schatten, 10);
   rect(p.x + 1, p.y + 3, p.w, p.h, 12);
   fill(...FARBE.flaeche);
   stroke(...FARBE.linie);
@@ -806,9 +880,9 @@ function zeichneKopf() {
 // Beispiel (HTML-Knöpfe, siehe ui.js). Gleiches Schema in allen PW-Programmen.
 function zeichneBeispielLeiste() {
   noStroke();
-  fill(253, 240, 242);
+  fill(...FARBE.akzentFlaeche);
   rect(0, 56, W, LEISTE);
-  stroke(240, 200, 208);
+  stroke(...FARBE.akzentLinie);
   strokeWeight(1);
   line(0, 56 + LEISTE, W, 56 + LEISTE);
   noStroke();
@@ -925,7 +999,7 @@ function zeichneDatenPanel() {
   const [m0, m1] = SZ.merkmale;
   for (const v of gitterWerte(m0)) {
     const [gx] = zuPlot(normieren(v, m0), 0);
-    stroke(0, 0, 0, 25);
+    stroke(...FARBE.text, 25);
     line(gx, PLOT.y, gx, PLOT.y + PLOT.s);
     noStroke();
     fill(...FARBE.grau);
@@ -934,7 +1008,7 @@ function zeichneDatenPanel() {
   }
   for (const v of gitterWerte(m1)) {
     const [, gy] = zuPlot(0, normieren(v, m1));
-    stroke(0, 0, 0, 25);
+    stroke(...FARBE.text, 25);
     line(PLOT.x, gy, PLOT.x + PLOT.s, gy);
     noStroke();
     fill(...FARBE.grau);
@@ -998,7 +1072,7 @@ function gitterText(v, m) {
 }
 
 function zeichneTeilMarke(x, y, label, r, alpha) {
-  stroke(255, alpha);
+  stroke(...FARBE.flaeche, alpha);
   strokeWeight(1.5);
   if (label === 1) {
     fill(...FARBE.io, alpha);
@@ -1164,7 +1238,7 @@ function zeichneVerbindung(x1, y1, r1, x2, y2, r2, w, glimmen) {
 function zeichneImpuls(x, y, farbe) {
   // heller Hof, damit der Impuls auch auf einer gleichfarbigen Linie sichtbar ist
   noStroke();
-  fill(255, 255, 255, 220);
+  fill(...FARBE.flaeche, 255, 255, 220);
   circle(x, y, 22);
   fill(farbe[0], farbe[1], farbe[2], 60);
   circle(x, y, 26);
@@ -1184,7 +1258,7 @@ function zeichneGewichtsSchild(x, y, w) {
   textFont(MONO);
   textSize(14);
   const b = textWidth(s) + 10;
-  fill(255, 240);
+  fill(...FARBE.flaeche, 240);
   stroke(...FARBE.linie);
   strokeWeight(1);
   rect(x - b / 2, y - 10, b, 20, 5);
@@ -1218,7 +1292,7 @@ function zeichneDeltaFehler(x, y, wert) {
   const b = textWidth(s) + 12;
   stroke(...FARBE.fehler);
   strokeWeight(1.5);
-  fill(255);
+  fill(...FARBE.flaeche);
   rect(x - b / 2, y - 10, b, 21, 6);
   noStroke();
   fill(...FARBE.fehler);
@@ -1230,7 +1304,7 @@ function zeichneDeltaFehler(x, y, wert) {
 function zeichneBias(x, y, r, wert) {
   stroke(...FARBE.neuron);
   strokeWeight(1.5);
-  fill(255);
+  fill(...FARBE.flaeche);
   circle(x, y, r * 2);
   noStroke();
   fill(...FARBE.text);
@@ -1590,9 +1664,9 @@ function zeichneFunktion(x, y, w, h, art, z) {
 
   stroke(...FARBE.text);
   strokeWeight(1);
-  fill(29, 29, 28, 235);
+  fill(...FARBE.schatten, 235);
   rect(x, y, w, h, 4);
-  stroke(255, 255, 255, 90);
+  stroke(...FARBE.flaeche, 255, 255, 90);
   line(x, Y(0), x + w, Y(0));
   line(X(0), y, X(0), y + h);
   noFill();
@@ -1607,7 +1681,7 @@ function zeichneFunktion(x, y, w, h, art, z) {
   if (z !== null && z !== undefined) {
     const zc = constrain(z, -xr, xr);
     noStroke();
-    fill(255, 80, 80);
+    fill(...FARBE.flaeche, 80, 80);
     circle(X(zc), Y(constrain(fn(zc), yr[0], yr[1])), w > 100 ? 10 : 7);
   }
   if (w > 100) {
@@ -2024,7 +2098,7 @@ function zeichneTooltip() {
   const b = textWidth(s) + 18;
   const tx = Math.min(mx + 14, W - b - 10);
   noStroke();
-  fill(29, 29, 28, 235);
+  fill(...FARBE.dunkelFlaeche, 235);
   rect(tx, my + 14, b, 26, 6);
   fill(255);
   textAlign(LEFT, CENTER);

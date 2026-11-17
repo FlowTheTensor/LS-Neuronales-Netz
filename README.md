@@ -58,6 +58,7 @@ Ein Beispiel lässt sich auch direkt über die Adresse öffnen, z. B. `index.htm
 | Klick ins Diagramm | eigenes Teil mit diesen Prozesswerten prüfen |
 | Maus über einem Punkt | Teilenummer, Messwerte und Prüfergebnis |
 | Maus über einem Neuron | Gewichte anzeigen (bei mehr als 4 versteckten Neuronen) |
+| Mond / Sonne oben rechts | dunkles oder helles Farbschema; die Wahl wird im Browser gespeichert und gilt für alle Lernsituationen |
 
 **Modi**
 
@@ -191,6 +192,7 @@ $$\Delta b = \eta\cdot\delta \qquad \Delta b_i = \eta\cdot\delta_i$$
 | `ui.js` | Knöpfe, Auswahllisten, Regler |
 | `sketch.js` | Ablauf, Zeichnen, Erklärtexte |
 | `assets/logo-jps.png` | Logo der Jakob-Preh-Schule |
+| `assets/logo-jps-hell.png` | Logo in Weiß für das dunkle Farbschema |
 | `libraries/p5.min.js` | p5.js (lokal, damit die Seite auch offline läuft) |
 
 ## Lokal starten
@@ -204,6 +206,7 @@ Die Seite braucht einen kleinen Webserver, ein Doppelklick auf `index.html` reic
 - Alle Schleifen haben geschweifte Klammern: Der p5-Web-Editor baut in Schleifen eine Endlosschleifen-Sicherung ein, die bei Schleifen ohne Klammern fehlschlägt.
 - Fehler in `draw()` werden abgefangen und als Hinweis angezeigt, statt das Programm einzufrieren.
 - Der Datensatz wird mit festem Startwert erzeugt und ist deshalb bei jedem Start gleich. Nur die Aufteilung in Trainings- und Testdaten (75 / 35) ist zufällig.
+- **Farbschema hell/dunkel:** Alle Farben stehen in zwei Paletten (`FARBE_HELL`, `FARBE_DUNKEL`); `FARBE` enthält die aktive Palette und wird beim Umschalten in place überschrieben. Die CSS-Variablen in `style.css` wechseln über die Klasse `dunkelmodus` am `<html>`-Element. Die Wahl steht im `localStorage` unter `jps-lernsituationen-farbschema` (ohne Speicher gilt die Systemeinstellung). Im dunklen Schema zeigt die Kopfzeile `assets/logo-jps-hell.png`.
 
 ## Lizenz
 
@@ -225,5 +228,5 @@ Vorschlag für die Namensnennung: *„KI-Qualitätsprüfung · Spritzguss“ von
 |---|---|
 | `libraries/p5.min.js` | [p5.js](https://p5js.org), GNU LGPL 2.1 |
 | `libraries/p5.sound.min.js` | [p5.sound](https://p5js.org/reference/p5.sound/), GNU LGPL 2.1 |
-| `assets/logo-jps.png` | Logo der Jakob-Preh-Schule – alle Rechte bei der Schule |
+| `assets/logo-jps.png`, `assets/logo-jps-hell.png` | Logo der Jakob-Preh-Schule – alle Rechte bei der Schule |
 | Schriften Quicksand, Inter, JetBrains Mono | über Google Fonts eingebunden, SIL Open Font License 1.1 |
